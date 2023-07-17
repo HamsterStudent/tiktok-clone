@@ -62,15 +62,6 @@ class _VideoPostState extends State<VideoPost>
       // 시간
       duration: _animationDuration,
     );
-
-    // 이벤트 감지
-    _animatinoController.addListener(
-      // value의 시작점과 끝점 사이의 값들을 호출해서 build해서
-      // 애니메이션을 부드럽게 만듬
-      () {
-        setState(() {});
-      },
-    );
   }
 
   @override
@@ -120,24 +111,36 @@ class _VideoPostState extends State<VideoPost>
             ),
           ),
           Positioned.fill(
-              // 아이콘 클릭 이벤트 무시
-              child: IgnorePointer(
-            child: Center(
-              child: Transform.scale(
-                // 변경된 값이 들어옴
-                scale: _animatinoController.value,
-                child: AnimatedOpacity(
-                  opacity: _isPaused ? 1 : 0,
-                  duration: _animationDuration,
-                  child: const FaIcon(
-                    FontAwesomeIcons.play,
-                    color: Colors.white,
-                    size: Sizes.size52,
+            // 아이콘 클릭 이벤트 무시
+            child: IgnorePointer(
+              child: Center(
+                child: AnimatedBuilder(
+                  // 애니메이션 controller의 변화를 감지
+                  animation: _animatinoController,
+                  // 함수. animationController의 값이 변할 때마다 실행됨
+                  builder: (context, child) {
+                    // Transform.scale위젯을 return
+                    return Transform.scale(
+                      // 최신값으로 갱신됨
+                      scale: _animatinoController.value,
+                      // child는 매개변수로 넘어오는 child를 그대로 넣음
+                      child: child,
+                    );
+                  },
+                  // 이 child가 builder의 child에 들어간다
+                  child: AnimatedOpacity(
+                    opacity: _isPaused ? 1 : 0,
+                    duration: _animationDuration,
+                    child: const FaIcon(
+                      FontAwesomeIcons.play,
+                      color: Colors.white,
+                      size: Sizes.size52,
+                    ),
                   ),
                 ),
               ),
             ),
-          ))
+          ),
         ],
       ),
     );
