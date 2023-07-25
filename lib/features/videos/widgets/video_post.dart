@@ -108,7 +108,11 @@ class _VideoPostState extends State<VideoPost>
     // 아래에 모달을 만들어주는 함수
     // await을 사용해 움직임 감지, 비디오가 또다시 자동으로 재생
     await showModalBottomSheet(
-        context: context, builder: (context) => const VideoComments());
+      context: context,
+      builder: (context) => const VideoComments(),
+      isScrollControlled: true,
+    );
+
     _onTogglePause();
   }
 
